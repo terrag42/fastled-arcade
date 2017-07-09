@@ -1,7 +1,8 @@
 void juggle() {
   static Ball balls[buttonCount];
 
-  const float velocityDecay = 0.0036;
+ //const float velocityDecay = 0.0036; //this decay constant is tailored for 144 LEDs
+  const float velocityDecay = 0.0044; //This is for 112 LEDs.
 
   const float maxCatchDiff = 200;
 
