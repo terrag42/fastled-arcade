@@ -14,6 +14,7 @@ show the lights for mode 2.
 so that the Arduino would sink current instead of source it.
 - Changed the velocityDecay constant (Juggle game) from .0036 to .0044 to accomodate 112 LEDs instead of 144.
 - Used PWM-capable pins for the arcade button LEDs so that fading effects using PWM could be used in the future
+- Added BPM pattern as mode 1 for a non-interactive "standby" effect
 */
 
 #include <Bounce2.h> //https://github.com/thomasfredericks/Bounce2 This library is available in the Arduino IDE's library manager.
