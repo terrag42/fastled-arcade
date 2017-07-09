@@ -1,52 +1,68 @@
-#include <Bounce2.h>
+/*This is a remix of Jason Coon's great FastLED Arcade software, originally written for a Teensy microcontroller. 
+//https://github.com/jasoncoon/fastled-arcade
+This could also be used with an ESP8266, but there are not enough pins on the ESP8266 to have 5 buttons with 
+separate LEDs and a mode switch, but the pins all have pullup resistors built in. You could wire the LEDs to 
+illuminate when pressed, but you'd lose some of the functionality of the "simon" game. I'll keep this option 
+in mind for another project.
+
+__Changes from Jason's FastLED Arcade code__
+- Removed support for infrared remote to free up some memory. I am using a mode change button that ties a pin to ground when pressed.
+- Added mode indication lights. Since Mode 1 is loaded on startup, the first time the mode button is pressed, it will 
+show the lights for mode 2.
+- Removed one of the games (launcher) because it used too much memory in global variables. Perhaps it could be added back with fewer balls.
+- Reversed the logic for lighting arcade buttons in the main sketch and also on the "simon" game. I chose to wire the LEDS
+so that the Arduino would sink current instead of source it.
+- Changed the velocityDecay constant (Juggle game) from .0036 to .0044 to accomodate 112 LEDs instead of 144.
+- Used PWM-capable pins for the arcade button LEDs so that fading effects using PWM could be used in the future
+*/
+
+#include <Bounce2.h> //https://github.com/thomasfredericks/Bounce2 This library is available in the Arduino IDE's library manager.
 #include <FastLED.h>
-#include <IRremote.h>
+//#include <IRremote.h>
 
 FASTLED_USING_NAMESPACE
 
-#define DATA_PIN    2
+#define DATA_PIN    11
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER GRB
-#define NUM_LEDS    144
-
-#define FRAMES_PER_SECOND  120
+#define NUM_LEDS    112
 
 //#define MILLI_AMPS         1000     // IMPORTANT: set the max milli-Amps of your power supply (4A = 4000mA)
-#define FRAMES_PER_SECOND  120 // here you can control the speed. With the Access Point / Web Server the animations run a bit slower.
 
-#define IR_RECV_PIN 3
-#define MODE_PIN    18
+#define IR_RECV_PIN 2
+#define MODE_PIN    4
 
 CRGB leds[NUM_LEDS];
 
-IRrecv irReceiver(IR_RECV_PIN);
+//IRrecv irReceiver(IR_RECV_PIN);
 
-#include "irCommands.h"
+//#include "irCommands.h"
 
-InputCommand command;
+//InputCommand command;
 
 bool modeInit = true;
 
-const uint8_t brightnessCount = 5;
-uint8_t brightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
+//const uint8_t brightnessCount = 5;
+//uint8_t brightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
 uint8_t brightness = 255;
 
 const uint8_t buttonCount = 5;
+//Original order = Red Grn Blu Yell Whit
 
 uint8_t buttonPins[] = {
-  7,  // red
-  8,  // green
-  9,  // blue
-  10, // yellow
-  11, // white
+  16,  // red
+  17, // green
+  18, // blue
+  15,  // yellow
+  14,  // white (A0)
 };
 
 uint8_t ledPins[] = {
-  0, // red
-  1, // green
-  4, // blue
-  5, // yellow
-  6, // white
+  6, // red (leds 43-68)
+  9, // green (leds 69-92)
+  10, // blue (leds 93-111
+  5, // yellow (leds 19-42)
+  3, // white (leds 0-18)
 };
 
 Bounce buttonMode = Bounce();
@@ -87,7 +103,7 @@ CHSV buttonColors[] = {
 
 #include "ball.h"
 #include "juggle.h"
-#include "launcher.h"
+//#include "launcher.h"
 #include "colorInvaders.h"
 #include "simon.h"
 #include "shooter.h"
@@ -118,16 +134,18 @@ void add() {
 }
 
 // List of modes.  Each is defined as a separate function below.
+uint8_t gHue = 0; // rotating "base color" used by the bpm pattern
 typedef void (*SimpleModeList[])();
 SimpleModeList modes = {
+  bpm,
   shooter,
   fireworks,
-  launcher,
+// launcher,
   pulse,
   add,
   colorInvaders,
   simon,
-  juggle,
+  juggle
 };
 
 uint8_t currentModeIndex = 0; // Index number of which mode is current
@@ -137,7 +155,7 @@ uint8_t currentModeIndex = 0; // Index number of which mode is current
 const int modeCount = ARRAY_SIZE(modes);
 
 void setup() {
-  // Serial.begin(9600);
+  //Serial.begin(9600);
 
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setCorrection(TypicalLEDStrip);
@@ -161,8 +179,8 @@ void setup() {
   }
 
   // Initialize the IR receiver
-  irReceiver.enableIRIn();
-  irReceiver.blink13(true);
+//  irReceiver.enableIRIn();
+//  irReceiver.blink13(true);
 }
 
 void loop() {
@@ -173,17 +191,16 @@ void loop() {
     if (buttonChanged[i]) {
       buttonPressTimes[i] = millis();
 
-      // Serial.print(buttonNames[i]);
-
-      // Serial.print(" button");
+  //     Serial.print(buttonNames[i]);
+  //     Serial.println(" button");
 
       if (buttons[i].fell()) {
         // Serial.print(" pressed time: ");
         // Serial.println(buttonPressTimes[i]);
-        digitalWrite(ledPins[i], HIGH);
+        digitalWrite(ledPins[i], LOW);
       } else {
         // Serial.println(" released");
-        digitalWrite(ledPins[i], LOW);
+        digitalWrite(ledPins[i], HIGH);
       }
     }
   }
@@ -193,7 +210,7 @@ void loop() {
   modeInit = false;
 
   FastLED.show();
-
+  EVERY_N_MILLISECONDS( 20 ) { gHue++; } // slowly cycle the "base color" through the rainbow
   handleInput();
 }
 
@@ -210,10 +227,17 @@ void moveTo(int index) {
     currentModeIndex = modeCount - 1;
 
   modeInit = true;
-
+//Serial.print("current mode = ");
+//Serial.println(currentModeIndex);
+  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  uint8_t i[] ={0,19,43,69,93,0,0,0}; //specific start points for the Wheat Sculpture 7 game modes, 1 standby mode
+  uint8_t j[] ={19,24,26,24,19,43,69,93}; //specific ranges for the Wheat Sculpture
+  fill_solid( &(leds[i[currentModeIndex]]), j[currentModeIndex], CHSV(currentModeIndex*30, 255, 255) ); //fills that range with a different color
+  FastLED.show();
+  FastLED.delay(1000); //shows mode selection for 1 second.
   fill_solid(leds, NUM_LEDS, CRGB::Black);
 }
-
+/*
 int getBrightnessLevel() {
   int level = 0;
   for (int i = 0; i < brightnessCount; i++) {
@@ -237,12 +261,12 @@ void adjustBrightness(int delta) {
   brightness = brightnessMap[level];
   FastLED.setBrightness(brightness);
 }
-
+*/
 void handleInput() {
   if(buttonMode.update() && buttonMode.fell())   {
     move(1);
   }
-  
+  /*
   command = readCommand(defaultHoldDelay);
 
   if (command != InputCommand::None) {
@@ -331,6 +355,17 @@ void powerOff()
 
       // go idle for a while, converve power
       delay(250);
+  }
+*/
+}
+void bpm()
+{
+  // colored stripes pulsing at a defined Beats-Per-Minute (BPM)
+  uint8_t BeatsPerMinute = 62;
+  CRGBPalette16 palette = PartyColors_p;
+  uint8_t beat = beatsin8( BeatsPerMinute, 64, 255);
+  for( int i = 0; i < NUM_LEDS; i++) { //9948
+    leds[i] = ColorFromPalette(palette, gHue+(i*2), beat-gHue+(i*10));
   }
 }
 
