@@ -1,5 +1,6 @@
 /*This is a remix of Jason Coon's great FastLED Arcade software, originally written for a Teensy microcontroller. 
 //https://github.com/jasoncoon/fastled-arcade
+This version works on an Arduino Nano or an Uno. I expect it would work on a Pro Mini, Pro Micro, Leonardo, Mega, and many of the other Arduino variants out there.
 This could also be used with an ESP8266, but there are not enough pins on the ESP8266 to have 5 buttons with 
 separate LEDs and a mode switch, but the pins all have pullup resistors built in. You could wire the LEDs to 
 illuminate when pressed, but you'd lose some of the functionality of the "simon" game. I'll keep this option 
