@@ -24,7 +24,8 @@ void simon()
 
   if (reset || pausingBetweenSequence || pausingBeforeSequence) {
     for (byte i = 0; i < buttonCount; i++) {
-      digitalWrite(ledPins[i], LOW);
+    //digitalWrite(ledPins[i], LOW);
+    digitalWrite(ledPins[i], HIGH); //LEDs are wired so the Arduino Nano sinks current rather than sources it.
     }
   }
 
@@ -77,7 +78,8 @@ void simon()
 
     for (byte i = 0; i < buttonCount; i++) {
       if (CHSV(buttonColors[i].hue, 255, 255) == sequenceColor) {
-        digitalWrite(ledPins[i], HIGH);
+        //digitalWrite(ledPins[i], HIGH);
+        digitalWrite(ledPins[i], LOW); //LEDs are wired so the Arduino Nano sinks current rather than sources it.
         break;
       }
     }
@@ -94,7 +96,8 @@ void simon()
     if (buttonChanged[i] && buttons[i].fell()) {
       buttonPressed = true;
       colorPressed = CHSV(buttonColors[i].hue, 255, 255);
-      digitalWrite(ledPins[i], HIGH);
+      //digitalWrite(ledPins[i], HIGH);
+      digitalWrite(ledPins[i], LOW); //LEDs are wired so the Arduino Nano sinks current rather than sources it.
     }
   }
 
