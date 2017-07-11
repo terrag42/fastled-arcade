@@ -11,7 +11,8 @@ Seven game modes and one non-interactive "standby" mode are selectable by a hidd
 **Fireworks:** The "night sky" is dark until the player presses an arcade button. A firework emitting a white light is then seen traveling into the sky. If the same button is pressed before the firework hits the ground, it will explode into a beautiful display of the chosen color. Multiple simultaneous fireworks can be launched and exploded.
 
 **Pulse:** Press a button and a pulse of that color will advance from left to right across the wheat stalks. Press more than one button to see what combinations can be produced.
-##Beam: Press and hold a button to launch a beam of corresponding color. Press and hold more than one button to see what combinations can be produced.
+
+**Beam:** Press and hold a button to launch a beam of corresponding color. Press and hold more than one button to see what combinations can be produced.
 
 **Color Invaders:** Similar to the classic "Space Invaders" arcade game, aliens of different colors descend from space to attack earth. Match the color of the first infantry alien to blow him up. Blow up as many invaders as you can, but watch out because their advance gets faster and faster the closer to earth they get!
 
