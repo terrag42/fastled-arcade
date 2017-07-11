@@ -22,6 +22,6 @@ Seven game modes and one non-interactive "standby" mode are selectable by a hidd
 
 A hidden power switch just above the leftmost arcade button interrupts current to the power supply. A braided steel wire is provided on the rear of the piece so it can be hung from a single anchor point. Foam covered bumpers on the rear protect the wall from scratches and help to stabilize the piece when buttons are pressed.
 
-![Schematic](/fastled-arcade/Trigo y Sol Schematic.jpg)
+![Schematic](Trigo%20y%20Sol%20Schematic.jpg)
 
 [How the LEDs are laid out](https://docs.google.com/spreadsheets/d/1bdw3SPKmITZUk9DHkq45C_wzfda27RjEgO8ZBFDRKSQ/).
