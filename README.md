@@ -18,6 +18,7 @@ Seven game modes and one non-interactive "standby" mode are selectable by a hidd
 **Simon:** This is the pattern matching "Simon says" game. The Arduino creates a random sequence of lights and requires the player to repeat the sequence. If the player succeeds, one more light is added to the sequence, which becomes progressively longer and more complex. Once the user fails, the Arduino displays the correct color (what the player should have selected at that point in the sequence), and the game is over.
 
 **Juggle:** The player is challenged to "juggle" as many "balls" as possible by  catching and throwing different colored balls back into the air. A successful catch/throw is made by hitting the button that  matches the color of the ball that is about to hit the ground.
+
 A hidden power switch just above the leftmost arcade button interrupts current to the power supply. A braided steel wire is provided on the rear of the piece so it can be hung from a single anchor point. Foam covered bumpers on the rear protect the wall from scratches and help to stabilize the piece when buttons are pressed.
 
 [How the LEDs are laid out](https://docs.google.com/spreadsheets/d/1bdw3SPKmITZUk9DHkq45C_wzfda27RjEgO8ZBFDRKSQ/).
