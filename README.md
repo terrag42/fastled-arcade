@@ -1,4 +1,4 @@
-# fastled-arcade
+# Trigo y Sol
 Trigo y Sol is a 40" tall piece that hangs on a wall and features five illuminated arcade buttons that allow the viewer to interact with it. The painted plywood structure is in the shape of a life-size shield with a sun-shaped inset that features a blue LED backlight. Five buttons are mounted to an enclosure that also houses the power supply and control board, an Arduino Nano. 112 LEDs are arranged to resemble five stalks of wheat, similar to what is seen in national flags or other agriculture icons. 
 
 Each LED on the surface of the "sun" is softened by 3D printed diffuser: PLA mixed with wood to give the appearance of an organic material. Stringy strands of plastic which were an unexpected by-product of the 3D printing process were left attached; they reinforce the appearance of the grains of wheat.
